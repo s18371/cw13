@@ -26,8 +26,12 @@ namespace cw13.Services
                     var lista = _context.Zamowienia.Where(e => e.Klient.Nazwisko.Equals(nazwisko)).ToList();
                     foreach (Zamowienie zam in lista)
                     {
-                        var id = _context.Zamowienie_WyrobyCukiernicze.Where(e => e.IdZamowienia == zam.IdZamowienia).Select(e => e.IdZamowienia).FirstOrDefault();
-                        var list2 = _context.WyrobCukiernicze.Where(e => e.IdWyrobuCukierniczego == id).Select(e => e.Nazwa).ToList();
+                        var id = _context.Zamowienie_WyrobyCukiernicze.Where(e => e.IdZamowienia == zam.IdZamowienia).Select(e => e.IdWyrobuCukierniczego).ToList();
+                        var list2 = new List<string>();
+                        foreach (int Id in id)
+                        {
+                            list2.Add(_context.WyrobCukiernicze.Where(e => e.IdWyrobuCukierniczego == Id).Select(e => e.Nazwa).FirstOrDefault());
+                        }
                         var odp = new ZamWyr { Zam = zam, Wyr = list2 };
                         listaOdp.Add(odp);
                     }
@@ -60,8 +64,12 @@ namespace cw13.Services
             {
                 var lista = _context.Zamowienia.ToList();
                 foreach(Zamowienie zam in lista){
-                    var id = _context.Zamowienie_WyrobyCukiernicze.Where(e => e.IdZamowienia == zam.IdZamowienia).Select(e => e.IdZamowienia).FirstOrDefault();
-                    var list2 = _context.WyrobCukiernicze.Where(e => e.IdWyrobuCukierniczego == id).Select(e=>e.Nazwa).ToList();
+                    var id = _context.Zamowienie_WyrobyCukiernicze.Where(e => e.IdZamowienia == zam.IdZamowienia).Select(e => e.IdWyrobuCukierniczego).ToList();
+                    var list2 = new List<string>();
+                    foreach (int Id in id)
+                    {
+                        list2.Add(_context.WyrobCukiernicze.Where(e => e.IdWyrobuCukierniczego == Id).Select(e => e.Nazwa).FirstOrDefault());
+                    }
                     var odp = new ZamWyr { Zam = zam, Wyr = list2 };
                     listaOdp.Add(odp);
                 }
@@ -121,7 +129,6 @@ namespace cw13.Services
             {
                 var zamow = new Zamowienie
                 {
-
                     Uwagi = "error"
                 };
                 var zamowie = new ZamWyr { Zam = zamow };
